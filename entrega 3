@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ONG Esperança Viva — SPA</title>
+
+  <style>
+    /* ===============================
+       Estilos (resumido, já funcional)
+    =============================== */
+    :root{
+      --cor-primaria:#0077b6;--cor-sec:#00b4d8;--cor-dest:#90e0ef;
+      --sucesso:#4caf50;--erro:#f44336;--aviso:#ffb703;
+      --fundo:#f8f9fa;--texto:#212529;--neutra:#dee2e6;
+      --font:Inter,system-ui,Arial;--titulo:600;
+      --s1:8px;--s2:16px;--s3:24px;--s4:32px;
+      --radius:10px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--fundo);color:var(--texto);line-height:1.6}
+    header{background:var(--cor-primaria);color:#fff;padding:var(--s2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    header h1{font-weight:var(--titulo);font-size:1.25rem}
+    nav ul{display:flex;gap:var(--s2);list-style:none}
+    nav a{color:#fff;text-decoration:none;padding:6px 10px;border-radius:6px}
+    nav a.active, nav a:hover{background:rgba(255,255,255,0.08)}
+    main{padding:var(--s4)}
+    .container{max-width:1100px;margin:0 auto}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--s3)}
+    .card{background:#fff;padding:var(--s3);border-radius:var(--radius);box-shadow:0 4px 18px rgba(0,0,0,.06)}
+    .card img{width:100%;height:160px;object-fit:cover;border-radius:6px;margin-bottom:var(--s2)}
+    .btn{background:var(--cor-sec);color:#fff;border:0;padding:10px 14px;border-radius:8px;cursor:pointer}
+    .btn.secondary{background:transparent;color:var(--cor-primaria);border:1px solid var(--cor-primaria)}
+    form{background:#fff;padding:var(--s3);border-radius:var(--radius);box-shadow:0 4px 18px rgba(0,0,0,.06);max-width:820px;margin:var(--s3) auto;display:flex;flex-direction:column;gap:12px}
+    label{font-weight:600;font-size:.95rem}
+    input,select,textarea{padding:10px;border-radius:6px;border:1px solid var(--neutra);font-size:1rem}
+    input:focus,select:focus,textarea:focus{outline:3px solid rgba(0,180,216,.12);border-color:var(--cor-sec)}
+    fieldset{border:1px solid var(--neutra);padding:12px;border-radius:6px}
+    legend{font-weight:700;color:var(--cor-primaria)}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .helpers{display:flex;gap:8px;flex-wrap:wrap}
+    .alert{padding:10px;border-radius:6px;color:#fff;text-align:center}
+    .alert.info{background:var(--cor-dest);color:#042a3a}
+    .alert.error{background:var(--erro)}
+    .error-msg{color:var(--erro);font-size:.9rem;margin-top:6px}
+    .success-msg{color:var(--sucesso);font-size:.95rem;margin-top:6px}
+    footer{background:var(--cor-primaria);color:#fff;padding:16px;text-align:center;margin-top:var(--s4)}
+    @media(max-width:700px){.grid-2{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <h1>ONG Esperança Viva</h1>
+      <nav aria-label="Principal">
+        <ul id="navlist">
+          <li><a href="#/sobre" data-route="sobre">Sobre</a></li>
+          <li><a href="#/projetos" data-route="projetos">Projetos</a></li>
+          <li><a href="#/cadastro" data-route="cadastro">Cadastro</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" id="app"><!-- SPA content injected here --></main>
+
+  <footer>
+    © 2025 ONG Esperança Viva — Todos os direitos reservados.
+  </footer>
+
+  <!-- ========================= TEMPLATES (script[type="text/template"]) ========================= -->
+  <script id="tpl-sobre" type="text/template">
+    <section id="sobre">
+      <h2>Sobre Nós</h2>
+      <p>A ONG Esperança Viva atua desde 2010 promovendo inclusão social, educação e sustentabilidade.</p>
+      <p>Nossa missão é oferecer oportunidades de crescimento e cidadania por meio de projetos e voluntariado.</p>
+
+      <h3>Missão, Visão e Valores</h3>
+      <ul>
+        <li><strong>Missão:</strong> Transformar vidas através da solidariedade.</li>
+        <li><strong>Visão:</strong> Ser referência nacional em impacto social.</li>
+        <li><strong>Valores:</strong> Empatia, transparência, respeito e comprometimento.</li>
+      </ul>
+
+      <div style="margin-top:16px" class="helpers">
+        <button class="btn" data-action="go:projetos">Ver Projetos</button>
+        <button class="btn secondary" data-action="go:cadastro">Quero Ajudar</button>
+      </div>
+    </section>
+  </script>
+
+  <script id="tpl-projetos" type="text/template">
+    <section id="projetos">
+      <h2>Projetos Sociais</h2>
+      <div class="cards" role="list">
+        <article class="card" role="listitem">
+          <img src="https://placehold.co/800x450" alt="Educação">
+          <h3>Educação para Todos</h3>
+          <p>Reforço escolar e oficinas culturais em comunidades vulneráveis.</p>
+          <div class="helpers"><button class="btn" data-action="go:cadastro">Seja Voluntário</button></div>
+        </article>
+
+        <article class="card" role="listitem">
+          <img src="https://placehold.co/800x450" alt="Meio ambiente">
+          <h3>Verde Esperança</h3>
+          <p>Reflorestamento e educação ambiental.</p>
+          <div class="helpers"><button class="btn" data-action="go:cadastro">Apoiar</button></div>
+        </article>
+
+        <article class="card" role="listitem">
+          <img src="https://placehold.co/800x450" alt="Doação">
+          <h3>Alimento Solidário</h3>
+          <p>Campanha de arrecadação e distribuição de cestas básicas.</p>
+          <div class="helpers"><button class="btn" data-action="donate">Doar</button></div>
+        </article>
+      </div>
+    </section>
+  </script>
+
+  <script id="tpl-cadastro" type="text/template">
+    <section id="cadastro">
+      <h2>Cadastro de Voluntário</h2>
+
+      <form id="volForm" novalidate>
+        <div id="formAlert" class="alert info">Preencha todos os campos obrigatórios corretamente.</div>
+
+        <div class="grid-2">
+          <div>
+            <label for="nome">Nome Completo *</label>
+            <input id="nome" name="nome" type="text" required>
+            <div class="error-msg" data-for="nome"></div>
+          </div>
+
+          <div>
+            <label for="email">E-mail *</label>
+            <input id="email" name="email" type="email" required>
+            <div class="error-msg" data-for="email"></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <label for="cpf">CPF *</label>
+            <input id="cpf" name="cpf" type="text" inputmode="numeric" placeholder="000.000.000-00" required>
+            <div class="error-msg" data-for="cpf"></div>
+          </div>
+
+          <div>
+            <label for="telefone">Telefone *</label>
+            <input id="telefone" name="telefone" type="tel" inputmode="tel" placeholder="(00) 00000-0000" required>
+            <div class="error-msg" data-for="telefone"></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <label for="nascimento">Data de Nascimento *</label>
+            <input id="nascimento" name="nascimento" type="date" required>
+            <div class="error-msg" data-for="nascimento"></div>
+          </div>
+
+          <div>
+            <label for="cidade">Cidade *</label>
+            <input id="cidade" name="cidade" type="text" required>
+            <div class="error-msg" data-for="cidade"></div>
+          </div>
+        </div>
+
+        <fieldset>
+          <legend>Endereço</legend>
+          <div class="grid-2">
+            <div>
+              <label for="endereco">Rua *</label>
+              <input id="endereco" name="endereco" type="text" required>
+              <div class="error-msg" data-for="endereco"></div>
+            </div>
+
+            <div>
+              <label for="cep">CEP *</label>
+              <input id="cep" name="cep" type="text" inputmode="numeric" placeholder="00000-000" required>
+              <div class="error-msg" data-for="cep"></div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" class="grid-2">
+            <div>
+              <label for="estado">Estado (UF) *</label>
+              <select id="estado" name="estado" required>
+                <option value="">Selecione</option>
+                <option>DF</option><option>GO</option><option>SP</option><option>RJ</option><option>MG</option>
+              </select>
+              <div class="error-msg" data-for="estado"></div>
+            </div>
+
+            <div>
+              <label for="complemento">Complemento (opcional)</label>
+              <input id="complemento" name="complemento" type="text">
+              <div class="error-msg" data-for="complemento"></div>
+            </div>
+          </div>
+        </fieldset>
+
+        <div style="display:flex;gap:12px;margin-top:8px;align-items:center">
+          <button type="submit" class="btn">Enviar Cadastro</button>
+          <button type="button" id="btnReset" class="btn secondary">Limpar</button>
+          <div id="submitMsg" style="margin-left:12px"></div>
+        </div>
+      </form>
+    </section>
+  </script>
+
+  <!-- ========================= SPA / Templates / Validações ========================= -->
+  <script>
+    (function(){
+      // --- Simple template/router SPA ---
+      const routes = {
+        'sobre': document.getElementById('tpl-sobre').textContent.trim(),
+        'projetos': document.getElementById('tpl-projetos').textContent.trim(),
+        'cadastro': document.getElementById('tpl-cadastro').textContent.trim()
+      };
+      const app = document.getElementById('app');
+      const navLinks = document.querySelectorAll('#navlist a');
+
+      function setActiveLink(route){
+        navLinks.forEach(a => a.classList.toggle('active', a.dataset.route === route));
+      }
+
+      function render(route){
+        const tpl = routes[route] || routes['sobre'];
+        app.innerHTML = tpl;
+        setActiveLink(route);
+        attachActions(); // attach handlers for buttons inside templates
+        if(route === 'cadastro') initForm(); // initialize form behaviors
+      }
+
+      // handle hash change
+      function router(){
+        const hash = location.hash.replace('#/','') || 'sobre';
+        render(hash);
+      }
+
+      window.addEventListener('hashchange', router);
+      // init
+      if(!location.hash) location.hash = '#/sobre';
+      router();
+
+      // Attach buttons in templates that use data-action (navigation or special)
+      function attachActions(){
+        document.querySelectorAll('[data-action]').forEach(btn=>{
+          const action = btn.dataset.action;
+          if(action.startsWith('go:')){
+            const route = action.split(':')[1];
+            btn.addEventListener('click', ()=> location.hash = '#/' + route);
+          } else if(action === 'donate'){
+            btn.addEventListener('click', ()=> alert('Obrigado! Em produção: sistema de doações.'));
+          }
+        });
+        // make template internal anchor links work
+        document.querySelectorAll('a[href^="#/"]').forEach(a=>{
+          a.addEventListener('click', e => {
+            e.preventDefault();
+            location.hash = a.getAttribute('href');
+          });
+        });
+      }
+
+      // --- FORM: masks, validation and DOM feedback ---
+      function initForm(){
+        const form = document.getElementById('volForm');
+        const btnReset = document.getElementById('btnReset');
+        const submitMsg = document.getElementById('submitMsg');
+        const formAlert = document.getElementById('formAlert');
+
+        // input masks (simple)
+        masker('#cpf','000.000.000-00');
+        masker('#telefone','(00) 00000-0000');
+        masker('#cep','00000-000');
+
+        btnReset && btnReset.addEventListener('click', ()=> {
+          form.reset();
+          clearAllErrors(form);
+          submitMsg.innerHTML = '';
+        });
+
+        form.addEventListener('submit', function(e){
+          e.preventDefault();
+          clearAllErrors(form);
+          submitMsg.innerHTML = '';
+          const data = new FormData(form);
+          const values = Object.fromEntries(data.entries());
+
+          const errors = validateAll(values);
+          if(Object.keys(errors).length){
+            // show errors inline
+            Object.entries(errors).forEach(([k,msg])=>{
+              showError(form, k, msg);
+            });
+            formAlert.textContent = 'Existem campos com erro. Corrija e tente novamente.';
+            formAlert.className = 'alert error';
+            // focus first error
+            const first = Object.keys(errors)[0];
+            const el = form.querySelector('[name="'+first+'"]');
+            if(el) el.focus();
+            return;
+          }
+
+          // If here, valid
+          formAlert.textContent = 'Dados validados com sucesso! Enviando...';
+          formAlert.className = 'alert info';
+          // Simulate send
+          setTimeout(()=> {
+            formAlert.textContent = 'Cadastro enviado com sucesso. Obrigado!';
+            formAlert.className = 'alert sucesso' || 'alert info';
+            submitMsg.innerHTML = '<span class="success-msg">✔ Enviado</span>';
+            form.reset();
+          }, 700);
+        });
+      }
+
+      // Simple masker factory
+      function masker(selector, pattern){
+        const el = document.querySelector(selector);
+        if(!el) return;
+        el.addEventListener('input', e=>{
+          const raw = e.target.value.replace(/\D/g,'');
+          let out = '';
+          let idx = 0;
+          for(let i=0;i<pattern.length && idx<raw.length;i++){
+            out += (pattern[i] === '0') ? raw[idx++] : pattern[i];
+          }
+          e.target.value = out;
+        });
+      }
+
+      // Clear inline errors
+      function clearAllErrors(form){
+        form.querySelectorAll('.error-msg').forEach(n => n.textContent = '');
+        const formAlert = document.getElementById('formAlert');
+        if(formAlert) { formAlert.textContent = 'Preencha todos os campos obrigatórios corretamente.'; formAlert.className = 'alert info'; }
+      }
+
+      function showError(form, fieldName, message){
+        const msgEl = form.querySelector('.error-msg[data-for="'+fieldName+'"]');
+        if(msgEl) msgEl.textContent = message;
+      }
+
+      // --- Data consistency validations ---
+      function validateAll(values){
+        const errors = {};
+
+        // nome: min length 3
+        if(!values.nome || values.nome.trim().length < 3) errors.nome = 'Informe seu nome completo (mínimo 3 caracteres).';
+
+        // email: simple regex
+        if(!values.email || !/^\S+@\S+\.\S+$/.test(values.email)) errors.email = 'E-mail inválido.';
+
+        // cpf: required + pattern + algorithm
+        if(!values.cpf) {
+          errors.cpf = 'CPF é obrigatório.';
+        } else {
+          const rawCpf = values.cpf.replace(/\D/g,'');
+          if(rawCpf.length !== 11) errors.cpf = 'CPF deve ter 11 dígitos.';
+          else if(!validateCPF(rawCpf)) errors.cpf = 'CPF inválido.';
+        }
+
+        // telefone: digits 10 or 11
+        if(!values.telefone) errors.telefone = 'Telefone é obrigatório.';
+        else {
+          const tel = values.telefone.replace(/\D/g,'');
+          if(tel.length < 10 || tel.length > 11) errors.telefone = 'Telefone deve ter 10 ou 11 dígitos.';
+        }
+
+        // nascimento: not future, age between 10 and 120
+        if(!values.nascimento) errors.nascimento = 'Data de nascimento obrigatória.';
+        else {
+          const age = calcAge(values.nascimento);
+          if(age < 10) errors.nascimento = 'Idade muito baixa (mín 10 anos).';
+          else if(age > 120) errors.nascimento = 'Idade inválida.';
+        }
+
+        // endereco
+        if(!values.endereco || values.endereco.trim().length < 5) errors.endereco = 'Informe o endereço completo.';
+
+        // cep: 8 digits
+        if(!values.cep) errors.cep = 'CEP obrigatório.';
+        else {
+          const cep = values.cep.replace(/\D/g,'');
+          if(cep.length !== 8) errors.cep = 'CEP inválido (8 dígitos).';
+        }
+
+        // cidade
+        if(!values.cidade || values.cidade.trim().length < 2) errors.cidade = 'Informe a cidade.';
+
+        // estado
+        if(!values.estado) errors.estado = 'Selecione o estado (UF).';
+
+        return errors;
+      }
+
+      // CPF validation (mod11)
+      function validateCPF(cpf){
+        if(!/^\d{11}$/.test(cpf)) return false;
+        // reject sequences
+        if (/^(\d)\1+$/.test(cpf)) return false;
+        let sum = 0;
+        for(let i=0;i<9;i++) sum += parseInt(cpf.charAt(i)) * (10 - i);
+        let rev = 11 - (sum % 11);
+        if(rev === 10 || rev === 11) rev = 0;
+        if(rev !== parseInt(cpf.charAt(9))) return false;
+        sum = 0;
+        for(let i=0;i<10;i++) sum += parseInt(cpf.charAt(i)) * (11 - i);
+        rev = 11 - (sum % 11);
+        if(rev === 10 || rev === 11) rev = 0;
+        return rev === parseInt(cpf.charAt(10));
+      }
+
+      // age calc
+      function calcAge(dateString){
+        const today = new Date();
+        const b = new Date(dateString);
+        if(isNaN(b)) return -1;
+        let age = today.getFullYear() - b.getFullYear();
+        const m = today.getMonth() - b.getMonth();
+        if(m < 0 || (m === 0 && today.getDate() < b.getDate())) age--;
+        return age;
+      }
+
+    })();
+  </script>
+</body>
+</html>
